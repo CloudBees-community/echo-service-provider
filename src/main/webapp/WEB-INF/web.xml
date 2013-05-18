@@ -19,4 +19,13 @@
         <servlet-name>Echo Service Provider</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>com.cloudbees.community.services.provider.SecurityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>/cloudbees/*</url-pattern>
+    </filter-mapping>
 </web-app>

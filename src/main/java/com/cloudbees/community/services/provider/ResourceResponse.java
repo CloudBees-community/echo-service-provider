@@ -43,12 +43,12 @@ public class ResourceResponse {
     /**
      * Resource config object. Contains properties specific to the provisioned resource.
      */
-    public Map<String, ?> config;
+    public Map config;
 
     /**
      * Settings as request. Provider can update it if needed.
      */
-    public Map<String, ?> settings;
+    public Map settings;
 
     /**
      * Provisioned resource message

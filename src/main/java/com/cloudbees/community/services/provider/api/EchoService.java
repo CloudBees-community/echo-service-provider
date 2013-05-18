@@ -1,7 +1,6 @@
 package com.cloudbees.community.services.provider.api;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -23,9 +22,10 @@ public class EchoService {
         return uriInfo.getQueryParameters();
     }
 
-    @Path("/echo")
-    @POST
-    public Map echo(Map request){
-        return request;
+    @Path("/")
+    @GET
+    public Map echoRoot(@Context UriInfo uriInfo){
+        return uriInfo.getQueryParameters();
     }
+
 }

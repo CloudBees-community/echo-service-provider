@@ -3,11 +3,15 @@
     "name":"Echo Service",
     "billing":[],
     "api":{
-        "production":"http://echo-service.gidsdemo.cloudbees.net",
+        "production":"http://echo-service.cloudbees.net",
         "username":"echo-service-user",
         "password":"12345",
         "sso_salt":"45232",
         "config_vars":["ECHO_SERVICE_ENDPOINT"],
-        "resources":[]
+        "resources":[{
+            "type":"echo",
+            "default": true,
+            "config_vars":[]
+        }]
     }
 }

@@ -9,8 +9,12 @@ import java.util.Map;
 public class ProviderMap  {
     private final Map map = new HashMap();
 
-    public Map put(String key, Object value){
+    public ProviderMap put(String key, Object value){
         map.put(key,value);
+        return this;
+    }
+
+    public Map content(){
         return map;
     }
 }

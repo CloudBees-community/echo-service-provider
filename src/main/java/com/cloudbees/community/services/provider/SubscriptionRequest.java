@@ -1,7 +1,9 @@
 package com.cloudbees.community.services.provider;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,5 +48,19 @@ public class SubscriptionRequest {
      * Settings property bag
      */
     @JsonProperty("settings")
-    public Map <String, ?> settings;
+    public Map <String, ?> settings = new HashMap<String, Object>();
+
+    /**
+     * If invalid throws {@link ServiceProviderException}
+     */
+    @JsonIgnore
+    public void validate(){
+        if(cloudbeesAccount == null){
+            throw new ServiceProviderException("cloudbees_account is required parameter", 400);
+        }
+
+        if(callbackUrl == null){
+            throw new ServiceProviderException("callback_url is required parameter", 400);
+        }
+    }
 }

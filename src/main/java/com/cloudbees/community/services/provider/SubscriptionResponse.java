@@ -57,7 +57,7 @@ public class SubscriptionResponse {
      *
      */
     @JsonProperty("config")
-    public Map<String, ?> config;
+    public Map config;
 
     /**
      * In general echo of the settings object passed in the request. Provider can add or remove existing
@@ -66,7 +66,7 @@ public class SubscriptionResponse {
      * Optional
      */
     @JsonProperty("settings")
-    public Map<String, ?> settings;
+    public Map settings;
 
     /**
      *
