@@ -18,6 +18,9 @@ import java.io.IOException;
  */
 @Singleton
 public class SecurityFilter implements Filter{
+    private static final String username = Utils.manifest.api.username;
+    private static final String password = Utils.manifest.api.password;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -58,6 +61,6 @@ public class SecurityFilter implements Filter{
         }
         String username = creds[0];
         String password = creds[1];
-        return username.equals("echo-service-user") && password.equals("12345");
+        return username.equals(username) && password.equals(password);
     }
 }
