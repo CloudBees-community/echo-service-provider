@@ -1,7 +1,9 @@
 package com.cloudbees.community.services.provider.model;
 
+import com.cloudbees.community.services.provider.Utils;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,6 +66,14 @@ public class Resource extends AbstractModel {
         Query query = session.createQuery("from Resource where id = :id and deletedAt is NULL");
         query.setParameter("id", id);
         return (Resource) query.uniqueResult();
+    }
+
+    public static Resource find(Long id){
+        Session session = Utils.getSessionFactory().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        Resource resource =  find(id, session);
+        tx.commit();
+        return resource;
     }
 
 }

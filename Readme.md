@@ -1,8 +1,18 @@
 # CloudBees Sample Service Provider
 
-A CloudBees ecosystem provider is a web app that implements set of REST/Http based APIs that speak JSON.
+A CloudBees ecosystem provider is a web app that implements set of REST/Http based APIs that speak JSON. This is sample
+echo-service provider. It implements Subscription and Resource APIs.
 
-Steps included
+
+# Build and Run echo-service provider
+
+Build and test echo-service Subscription and Resource endpoint.
+
+    $ mvn clean install
+
+# Steps to develop service provider endpoint
+
+See EchoSubscription.java and EchoResource.java to see how these are implemented and customize these to suite your service provider.
 
 * Define a manifest.
 

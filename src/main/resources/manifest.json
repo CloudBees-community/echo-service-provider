@@ -11,7 +11,7 @@
         "resources":[{
             "type":"echo",
             "default": true,
-            "config_vars":[]
+            "config_vars":["ECHO_RESOURCE_CONFIG"]
         }]
     }
 }

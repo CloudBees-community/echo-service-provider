@@ -1,16 +1,19 @@
 package com.cloudbees.community.services.provider.api;
 
-import com.cloudbees.community.services.provider.JsonObjectMapper;
 import com.cloudbees.community.services.provider.ProviderMap;
 import com.cloudbees.community.services.provider.ResourceRequest;
 import com.cloudbees.community.services.provider.ResourceResponse;
 import com.cloudbees.community.services.provider.ServiceProviderException;
 import com.cloudbees.community.services.provider.SubscriptionRequest;
-import com.cloudbees.community.services.provider.Utils;
+import com.cloudbees.community.services.provider.guice.InjectLogger;
 import com.cloudbees.community.services.provider.model.Resource;
 import com.cloudbees.community.services.provider.model.Subscription;
+import com.google.inject.Inject;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -45,9 +48,18 @@ import java.util.Map;
 @Produces("application/json")
 @Consumes("application/json")
 public class EchoResource {
+    @InjectLogger
+    private Logger logger;
+
+    @Inject
+    private SessionFactory sessionFactory;
+
+    @Inject
+    private ObjectMapper objectMapper;
+
     @POST
     public ResourceResponse create(ResourceRequest request) {
-        Session session = Utils.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = null;
 
         try{
@@ -60,11 +72,11 @@ public class EchoResource {
             }
 
             Resource resource = new Resource();
-            resource.setSettings(JsonObjectMapper.getObjectMapper().writeValueAsString(request.settings));
+            resource.setSettings(objectMapper.writeValueAsString(request.settings));
             resource.setCallbackUrl(request.callbackUrl);
-            Map config = new ProviderMap().put("ECHO_SERVICE_ENDPOINT", "http://echo-service.cloudbees.net/api/echo").content();
+            Map config = new ProviderMap().put("ECHO_RESOURCE_CONFIG", "some_config_str").content();
 
-            resource.setConfig(JsonObjectMapper.getObjectMapper().writeValueAsString(config));
+            resource.setConfig(objectMapper.writeValueAsString(config));
 
             resource.setSubscription(subscription);
             session.save(resource);
@@ -75,6 +87,7 @@ public class EchoResource {
             tx.commit();
             return resourceResponse;
         }catch (Exception e){
+            logger.error(e.getMessage());
             if (tx != null) {
                 tx.rollback();
             }
@@ -89,7 +102,7 @@ public class EchoResource {
     @PUT
     @Path("{id}")
     public ResourceResponse update(@PathParam("id") String id, SubscriptionRequest request) {
-        Session session = Utils.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
@@ -98,10 +111,10 @@ public class EchoResource {
             if(resource == null){
                 throw new ServiceProviderException("Unknown Resource id: "+id, 400);
             }
-            resource.setSettings(JsonObjectMapper.getObjectMapper().writeValueAsString(request.settings));
+            resource.setSettings(objectMapper.writeValueAsString(request.settings));
             session.save(resource);
             ResourceResponse resourceResponse = new ResourceResponse();
-            resourceResponse.config = JsonObjectMapper.getObjectMapper().readValue(resource.getSettings(),Map.class);
+            resourceResponse.config = objectMapper.readValue(resource.getSettings(),Map.class);
             resourceResponse.settings = request.settings;
             tx.commit();
             return resourceResponse;
@@ -121,7 +134,7 @@ public class EchoResource {
     @DELETE
     @Path("{id}")
     public Map delete(@PathParam("id") String id){
-        Session session = Utils.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();

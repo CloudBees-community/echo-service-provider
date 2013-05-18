@@ -1,5 +1,6 @@
 package com.cloudbees.community.services.provider;
 
+import com.google.inject.Singleton;
 import com.sun.jersey.core.util.Base64;
 
 import javax.servlet.Filter;
@@ -15,6 +16,7 @@ import java.io.IOException;
 /**
  * @author Vivek Pandey
  */
+@Singleton
 public class SecurityFilter implements Filter{
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -26,7 +28,11 @@ public class SecurityFilter implements Filter{
         if (authenticate((HttpServletRequest) request)) {
             chain.doFilter(request, response);
         } else {
-            ((HttpServletResponse)response).sendError(401, "Not Authorized");
+            ((HttpServletResponse)response).setStatus(401);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().print("{\"error\":\"Not authorized\"}");
+
         }
     }
 

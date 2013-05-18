@@ -1,7 +1,9 @@
 package com.cloudbees.community.services.provider.model;
 
+import com.cloudbees.community.services.provider.Utils;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -75,4 +77,13 @@ public class Subscription extends AbstractModel{
         query.setParameter("id", id);
         return (Subscription) query.uniqueResult();
     }
+
+    public static Subscription find(Long id){
+        Session session = Utils.getSessionFactory().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        Subscription sub =  find(id, session);
+        tx.commit();
+        return sub;
+    }
+
 }
